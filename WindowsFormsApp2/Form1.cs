@@ -77,7 +77,6 @@ namespace WindowsFormsApp2
             public xPoint(string _t, int _v, int _x, int _y) { t = _t; v = _v; x = _x; y = _y; }
         }
 
-
         private void button1_Click(object sender, EventArgs e)
         {
 
