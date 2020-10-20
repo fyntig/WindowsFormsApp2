@@ -67,6 +67,15 @@ namespace WindowsFormsApp2
             g2 = panel2.CreateGraphics();
         }
 
+        class xPoint
+        {
+            public int _x, _y; //координата
+            public string _t;  //тип: cross - пересечение, end - окончание, line - точка линии
+            public int _v;     //направление - как часы: 1, 3 ,5 ,6 ,7 ,9 ,11, 12
+
+        }
+
+
         private void button1_Click(object sender, EventArgs e)
         {
 
