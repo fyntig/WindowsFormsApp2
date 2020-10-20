@@ -69,10 +69,12 @@ namespace WindowsFormsApp2
 
         class xPoint
         {
-            public int _x, _y; //координата
-            public string _t;  //тип: cross - пересечение, end - окончание, line - точка линии
-            public int _v;     //направление - как часы: 1, 3 ,5 ,6 ,7 ,9 ,11, 12
+            public int x, y; //координата
+            public string t;  //тип: cross - пересечение, end - окончание, line - точка линии
+            public int v;     //направление - как часы: 1, 3 ,5 ,6 ,7 ,9 ,11, 12
 
+            public xPoint(string _t, int _x, int _y) { t = _t; x = _x; y = _y; }
+            public xPoint(string _t, int _v, int _x, int _y) { t = _t; v = _v; x = _x; y = _y; }
         }
 
 
