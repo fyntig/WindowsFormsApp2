@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.30225.117
+VisualStudioVersion = 16.0.30225.118 #4merge
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp2", "WindowsFormsApp2\WindowsFormsApp2.csproj", "{082E052F-E470-4D2A-95D4-7AF8F02AE3E6}"
 EndProject
@@ -23,3 +23,4 @@ Global
 		SolutionGuid = {E7B763B8-B12D-4555-8F48-922D5D15CCCD}
 	EndGlobalSection
 EndGlobal
+
