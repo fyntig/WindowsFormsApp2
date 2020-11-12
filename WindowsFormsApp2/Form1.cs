@@ -12,6 +12,8 @@ namespace WindowsFormsApp2
 {
     public partial class Form1 : Form
     {
+        Bitmap b1, b2 = new Bitmap(200, 200);
+
         Graphics g1, g2;
         Point CurrentPoint, PrevPoint;
         bool isPressed;
@@ -63,8 +65,8 @@ namespace WindowsFormsApp2
         public Form1()
         {
             InitializeComponent();
-            g1 = panel1.CreateGraphics();
-            g2 = panel2.CreateGraphics();
+            g1 = Graphics.FromImage(b1);
+            g2 = Graphics.FromImage(b2);
         }
 
         class xPoint
@@ -84,6 +86,16 @@ namespace WindowsFormsApp2
 
         private void button1_Click(object sender, EventArgs e)
         {
+
+            //это код который определяет чёрный пиксель
+            for(int _x = 0; _x < 200; _x++)
+            for(int _y = 0; _y < 200; _y++)
+            if(b1.GetPixel(_x, _y) == Color.Black)
+                {
+                //определяем тип этого пикселя пересечение, окончание или линия
+
+
+                }
 
 
            // foreach (xPoint i in i1)
