@@ -12,7 +12,7 @@ namespace WindowsFormsApp2
 {
     public partial class Form1 : Form
     {
-        Bitmap b1, b2 = new Bitmap(200, 200);
+        Bitmap b1 = new Bitmap(200, 200), b2 = new Bitmap(200, 200);
 
         Graphics g1, g2;
         Point CurrentPoint, PrevPoint;
@@ -32,6 +32,8 @@ namespace WindowsFormsApp2
                 CurrentPoint = e.Location;
                 Pen _p = new Pen(Color.Black);
                 g1.DrawLine(_p, PrevPoint, CurrentPoint);
+                panel1.BackgroundImage = b1;
+                panel1.Refresh();
             }
         }
 
@@ -54,6 +56,8 @@ namespace WindowsFormsApp2
                 CurrentPoint = e.Location;
                 Pen _p = new Pen(Color.Black);
                 g2.DrawLine(_p, PrevPoint, CurrentPoint);
+                panel2.BackgroundImage = b2;
+                panel2.Refresh();
             }
         }
 
@@ -66,7 +70,9 @@ namespace WindowsFormsApp2
         {
             InitializeComponent();
             g1 = Graphics.FromImage(b1);
+            g1.Clear(Color.White);
             g2 = Graphics.FromImage(b2);
+            g2.Clear(Color.White);
         }
 
         class xPoint
@@ -88,13 +94,23 @@ namespace WindowsFormsApp2
         {
 
             //это код который определяет чёрный пиксель
-            for(int _x = 0; _x < 200; _x++)
-            for(int _y = 0; _y < 200; _y++)
-            if(b1.GetPixel(_x, _y) == Color.Black)
+            for (int _x = 0; _x < 200; _x++)
+                for (int _y = 0; _y < 200; _y++)
                 {
-                //определяем тип этого пикселя пересечение, окончание или линия
+                    if (_x == 100 && _y == 100)
+                    {
+                        b1.SetPixel(_x, _y, Color.Black);
+                        panel1.BackgroundImage = b1;
+                        panel1.Refresh();                        
+                        if (b1.GetPixel(_x, _y).A == 255 && b1.GetPixel(_x, _y).R == 0 && b1.GetPixel(_x, _y).G == 0 && b1.GetPixel(_x, _y).B == 0)
+                        {
+                            //определяем тип этого пикселя пересечение, окончание или линия
+                            MessageBox.Show("fgf");
 
-
+                        }
+                        MessageBox.Show(b1.GetPixel(_x, _y).ToString());
+                        break;
+                    }
                 }
 
 
