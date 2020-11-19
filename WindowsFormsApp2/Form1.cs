@@ -93,71 +93,55 @@ namespace WindowsFormsApp2
             List<xPoint> i2 = new List<xPoint>();
 
             Pen _p = new Pen(Color.Black);
-           
+
 
 
             //это код который определяет чёрный пиксель (крайние игнорируются, потому что он всегда будет окончанием или пересечением)
             for (int _x = 1; _x < 199; _x++)
-            for (int _y = 1; _y < 199; _y++)
+                for (int _y = 1; _y < 199; _y++)
 
 
-            if (b1.GetPixel(_x, _y) == Color.Black)      
-            
-
-                        {
-                            int _v = 0, _s = -1, __v = 1; //направление окончания и сумма соседей 0 - точка, 1 - окончание, 2 - линия 3+ - пересечение
-                                                          //определяем тип этого пикселя пересечение, окончание или линия
-                                                          //определим его соседей
-                            for (int __x = -1; __x < 2; __x++)
-                                for (int __y = -1; __y < 2; __y++)
-                                {
-                                    __v++;
-                                    if (b1.GetPixel(_x + __x, _y + __y) == Color.Black)
-                                    {
-                                        _s++;
-                                        if (__x != 0 && __y != 0) _v = __v;
-                                    }
-                                }
-
-                                 switch (_s)
-                                 {
-                                     case 0:
-                                         i1.Add(new xPoint(_x, _y, 0));
-                                         break;
-                                     case 1:
-                                         i1.Add(new xPoint(_x, _y, 2, _v));
-                                         break;
-                                     case 2:
-                                         i1.Add(new xPoint(_x, _y, 3));
-                                         break;
-                                     default:
-                                         MessageBox.Show("!!");
-                                         i1.Add(new xPoint(_x, _y, 1));
-                                         break;
-                                 } 
-
-            //это код который определяет чёрный пиксель
-            for (int _x = 0; _x < 200; _x++)
-                for (int _y = 0; _y < 200; _y++)
-                {
-                    if (_x == 100 && _y == 100)
+                    if (b1.GetPixel(_x, _y).A == 255 && b1.GetPixel(_x, _y).R == 0 && b1.GetPixel(_x, _y).G == 0 && b1.GetPixel(_x, _y).B == 0)
                     {
-                        b1.SetPixel(_x, _y, Color.Black);
-                        panel1.BackgroundImage = b1;
-                        panel1.Refresh();                        
-                        if (b1.GetPixel(_x, _y).A == 255 && b1.GetPixel(_x, _y).R == 0 && b1.GetPixel(_x, _y).G == 0 && b1.GetPixel(_x, _y).B == 0)
-                        {
-                            //определяем тип этого пикселя пересечение, окончание или линия
-                            MessageBox.Show("fgf");
+                        int _v = 0, _s = -1, __v = 1; //направление окончания и сумма соседей 0 - точка, 1 - окончание, 2 - линия 3+ - пересечение
+                                                      //определяем тип этого пикселя пересечение, окончание или линия
+                                                      //определим его соседей
+                        for (int __x = -1; __x < 2; __x++)
+                            for (int __y = -1; __y < 2; __y++)
+                            {
+                                __v++;
+                                if (b1.GetPixel(_x + __x, _y + __y) == Color.Black)
+                                {
+                                    _s++;
+                                    if (__x != 0 && __y != 0) _v = __v;
+                                }
+                            }
 
+                        switch (_s)
+                        {
+                            case 0:
+                                i1.Add(new xPoint(_x, _y, 0));
+                                break;
+                            case 1:
+                                i1.Add(new xPoint(_x, _y, 2, _v));
+                                break;
+                            case 2:
+                                i1.Add(new xPoint(_x, _y, 3));
+                                break;
+                            default:
+                                MessageBox.Show("!!");
+                                i1.Add(new xPoint(_x, _y, 1));
+                                break;
                         }
-                    
+                    }
+                 
 
 
             for (int _x = 1; _x < 199; _x++)
-                for (int _y = 1; _y < 199; _y++)
-                    if (b2.GetPixel(_x, _y) == Color.Black)
-                    {
+            for (int _y = 1; _y < 199; _y++)
+                    
+                if (b2.GetPixel(_x, _y).A == 255 && b2.GetPixel(_x, _y).R == 0 && b2.GetPixel(_x, _y).G == 0 && b2.GetPixel(_x, _y).B == 0)
+                        {
                         
                         int _v = 0, _s = -1, __v = 1; //направление окончания и сумма соседей 0 - точка, 1 - окончание, 2 - линия 3+ - пересечение
                                                       //определяем тип этого пикселя пересечение, окончание или линия
@@ -187,10 +171,8 @@ namespace WindowsFormsApp2
                         
 
                         }
-                        MessageBox.Show(b1.GetPixel(_x, _y).ToString());
-                        break;
-                    }
-                }
+
+                
 
 
             // foreach (xPoint i in i1)
