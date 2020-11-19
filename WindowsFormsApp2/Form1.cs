@@ -70,7 +70,9 @@ namespace WindowsFormsApp2
         {
             InitializeComponent();
             g1 = Graphics.FromImage(b1);
-            g2 = Graphics.FromImage(b2);           
+            g1.Clear(Color.White);
+            g2 = Graphics.FromImage(b2);
+            g2.Clear(Color.White);
         }
 
         class xPoint
@@ -134,6 +136,19 @@ namespace WindowsFormsApp2
                                          break;
                                  } 
 
+            //это код который определяет чёрный пиксель
+            for (int _x = 0; _x < 200; _x++)
+                for (int _y = 0; _y < 200; _y++)
+                {
+                    if (_x == 100 && _y == 100)
+                    {
+                        b1.SetPixel(_x, _y, Color.Black);
+                        panel1.BackgroundImage = b1;
+                        panel1.Refresh();                        
+                        if (b1.GetPixel(_x, _y).A == 255 && b1.GetPixel(_x, _y).R == 0 && b1.GetPixel(_x, _y).G == 0 && b1.GetPixel(_x, _y).B == 0)
+                        {
+                            //определяем тип этого пикселя пересечение, окончание или линия
+                            MessageBox.Show("fgf");
 
                         }
                     
@@ -171,7 +186,11 @@ namespace WindowsFormsApp2
                              
                         
 
+                        }
+                        MessageBox.Show(b1.GetPixel(_x, _y).ToString());
+                        break;
                     }
+                }
 
 
             // foreach (xPoint i in i1)
