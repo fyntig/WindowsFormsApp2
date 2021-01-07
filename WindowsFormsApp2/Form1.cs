@@ -80,12 +80,26 @@ namespace WindowsFormsApp2
         {
             public int x, y, //координата
                         t,  //тип: 1 - пересечение, 2 - окончание, 3 - точка линии, 0 - точка
-                        v;  //направление - как часы: 1, 3 ,5 ,6 ,7 ,9 ,11, 12
-            public double r; //степень близости к наиболее близкой точке второго рисунка
+                        v;  //направление - как часы: 1, 2 ,3 ,4 ,5 ,6 ,7, 8
+            public double r = 999d; //степень близости к наиболее близкой точке второго рисунка
 
             public xPoint(int _x, int _y, int _t) { x = _x; y = _y; t = _t; }
             public xPoint(int _x, int _y, int _t, int _v) { x = _x; y = _y; t = _t; v = _v; }
-          
+
+            public void GetInfo()
+            {
+    
+                MessageBox.Show($"координаты: {x};{y}, расстояние: {r}");
+            }
+
+        }
+
+        //если точка чёрная возвращает 1
+        private bool isBlack(Color cl)
+        {
+            bool Result = false;
+            if (cl.A == 255 && cl.R == 0 && cl.G == 0 && cl.B == 0) Result = true;
+            return Result;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -95,97 +109,222 @@ namespace WindowsFormsApp2
 
             //Pen _p = new Pen(Color.Black);
 
-
-
             //это код который определяет чёрный пиксель (крайние игнорируются, потому что он всегда будет окончанием или пересечением)
-            for (int _x = 1; _x < 199; _x++)
-                for (int _y = 1; _y < 199; _y++)
+            for (int _x = 1; _x < b1.Width; _x++)
+                for (int _y = 1; _y < b1.Height; _y++)
+                {
 
-
-                    if (b1.GetPixel(_x, _y).A == 255 && b1.GetPixel(_x, _y).R == 0 && b1.GetPixel(_x, _y).G == 0 && b1.GetPixel(_x, _y).B == 0)
+                    if (isBlack(b1.GetPixel(_x, _y)))
+                    //if (b1.GetPixel(_x, _y).A == 255 && b1.GetPixel(_x, _y).R == 0 && b1.GetPixel(_x, _y).G == 0 && b1.GetPixel(_x, _y).B == 0)
                     //if (Color.Equals(b1.GetPixel(_x, _y), Color.Black)) так требуется перегрузка операторов == и != для структуры (Color не тут, поэтому не сможем)
-                        {                        
-                        int _v = 0, _s = -1, __v = 1; //направление окончания и сумма соседей 0 - точка, 1 - окончание, 2 - линия 3+ - пересечение
-                                                      //определяем тип этого пикселя пересечение, окончание или линия
-                                                      //определим его соседей
-                        for (int __x = -1; __x < 2; __x++)
-                            for (int __y = -1; __y < 2; __y++)
-                            {
+                    {
+                        int _v = 0, _s = 0; //направление окончания и сумма соседей 0 - точка, 1 - окончание, 2 - линия 3+ - пересечение
+                                            //определяем тип этого пикселя пересечение, окончание или линия
+                                            //определим его соседей
+                        /*for (int __x = -1; __x < 2; __x++)
+                        for (int __y = -1; __y < 2; __y++)
+                        {
                                 __v++;
+                                
+                                // это не то что надо, надо считат ьне количество чёрных пискелей, а количество смен белого на чёрный
                                 if (b1.GetPixel(_x + __x, _y + __y).A == 255 && b1.GetPixel(_x + __x, _y + __y).R == 0 && b1.GetPixel(_x + __x, _y + __y).G == 0 && b1.GetPixel(_x + __x, _y + __y).B == 0)
-                                //if (b1.GetPixel(_x + __x, _y + __y) == Color.Black)
                                 {
                                     _s++;
                                     if (__x != 0 && __y != 0) _v = __v;
-                                }
+                                } }*/
+
+                        if (isBlack(b1.GetPixel(_x - 1, _y - 1))) //первый пиксель в обходе (левый верхний)
+                            if (!isBlack(b1.GetPixel(_x - 1, _y + 0))) //слева от проверяемого пикселя  
+                            {
+                                _s++;
+                                _v = 1;
                             }
+
+                        if (isBlack(b1.GetPixel(_x + 0, _y - 1))) // верхний
+                            if (!isBlack(b1.GetPixel(_x - 1, _y - 1)))
+                            {
+                                _s++;
+                                _v = 2;
+                            }
+
+                        if (isBlack(b1.GetPixel(_x + 1, _y - 1))) // правый верхний
+                            if (!isBlack(b1.GetPixel(_x + 0, _y - 1)))
+                            {
+                                _s++;
+                                _v = 3;
+                            }
+
+                        if (isBlack(b1.GetPixel(_x + 1, _y + 0))) // правый
+                            if (!isBlack(b1.GetPixel(_x + 1, _y - 1)))
+                            {
+                                _s++;
+                                _v = 4;
+                            }
+
+                        if (isBlack(b1.GetPixel(_x + 1, _y + 1))) // правый нижний
+                            if (!isBlack(b1.GetPixel(_x + 1, _y + 0)))
+                            {
+                                _s++;
+                                _v = 5;
+                            }
+
+                        if (isBlack(b1.GetPixel(_x + 0, _y + 1))) // нижний
+                            if (!isBlack(b1.GetPixel(_x + 1, _y + 1)))
+                            {
+                                _s++;
+                                _v = 6;
+                            }
+
+                        if (isBlack(b1.GetPixel(_x - 1, _y + 1))) // левый нижний
+                            if (!isBlack(b1.GetPixel(_x + 0, _y + 1)))
+                            {
+                                _s++;
+                                _v = 7;
+                            }
+
+                        if (isBlack(b1.GetPixel(_x - 1, _y + 0))) // левый
+                            if (!isBlack(b1.GetPixel(_x - 1, _y + 1)))
+                            {
+                                _s++;
+                                _v = 8;
+                            }
+                        //MessageBox.Show(_s.ToString());
 
                         switch (_s)
                         {
                             case 0:
-                                i1.Add(new xPoint(_x, _y, 0));
-                                MessageBox.Show("point") ;
+                                //i1.Add(new xPoint(_x, _y, 0));
+                                //MessageBox.Show($"point {_x} {_y} чёрная");
                                 break;
                             case 1:
                                 i1.Add(new xPoint(_x, _y, 2, _v));
-                                MessageBox.Show("vector");
+                                //MessageBox.Show("vector");
+                                //i1.Last().GetInfo();
                                 break;
                             case 2:
-                                i1.Add(new xPoint(_x, _y, 3));
-                                MessageBox.Show("line");
+                                //i1.Add(new xPoint(_x, _y, 3));
+                                //i1.Last().GetInfo();
+                                //MessageBox.Show($"line {_x} {_y} чёрная");
                                 break;
                             default:
-                                MessageBox.Show("cross");
-                                i1.Add(new xPoint(_x, _y, 1));
+                                //MessageBox.Show("cross");
+                                //i1.Add(new xPoint(_x, _y, 1));
                                 break;
                         }
                     }
-                 
 
-
-            /*for (int _x = 1; _x < 199; _x++)
-            for (int _y = 1; _y < 199; _y++)
-                    
-                if (b2.GetPixel(_x, _y).A == 255 && b2.GetPixel(_x, _y).R == 0 && b2.GetPixel(_x, _y).G == 0 && b2.GetPixel(_x, _y).B == 0)
+                        if (isBlack(b2.GetPixel(_x, _y)))
+                        //if (b1.GetPixel(_x, _y).A == 255 && b1.GetPixel(_x, _y).R == 0 && b1.GetPixel(_x, _y).G == 0 && b1.GetPixel(_x, _y).B == 0)
+                        //if (Color.Equals(b1.GetPixel(_x, _y), Color.Black)) так требуется перегрузка операторов == и != для структуры (Color не тут, поэтому не сможем)
                         {
-                        
-                        int _v = 0, _s = -1, __v = 1; //направление окончания и сумма соседей 0 - точка, 1 - окончание, 2 - линия 3+ - пересечение
-                                                      //определяем тип этого пикселя пересечение, окончание или линия
-                                                      //определим его соседей
-
-                        //подвох в том что 1 1 0 будет воспринят как пересчечение, а не линия, видимо надо применить метод зонга-суня
-                        //                 0 1 1 
-                        for (int __x = -1; __x < 2; __x++)
+                            int _v = 0, _s = 0; //направление окончания и сумма соседей 0 - точка, 1 - окончание, 2 - линия 3+ - пересечение
+                                                //определяем тип этого пикселя пересечение, окончание или линия
+                                                //определим его соседей
+                            /*for (int __x = -1; __x < 2; __x++)
                             for (int __y = -1; __y < 2; __y++)
                             {
-                                __v++;
-                                if (b2.GetPixel(_x+__x, _y+__y) == Color.Black)
+                                    __v++;
+
+                                    // это не то что надо, надо считат ьне количество чёрных пискелей, а количество смен белого на чёрный
+                                    if (b1.GetPixel(_x + __x, _y + __y).A == 255 && b1.GetPixel(_x + __x, _y + __y).R == 0 && b1.GetPixel(_x + __x, _y + __y).G == 0 && b1.GetPixel(_x + __x, _y + __y).B == 0)
+                                    {
+                                        _s++;
+                                        if (__x != 0 && __y != 0) _v = __v;
+                                    } }*/
+
+                            if (isBlack(b2.GetPixel(_x - 1, _y - 1))) //первый пиксель в обходе (левый верхний)
+                                if (!isBlack(b2.GetPixel(_x - 1, _y + 0))) //слева от проверяемого пикселя  
                                 {
                                     _s++;
-                                    if (__x != 0 && __y != 0) _v = __v;
+                                    _v = 1;
                                 }
+
+                            if (isBlack(b2.GetPixel(_x + 0, _y - 1))) // верхний
+                                if (!isBlack(b2.GetPixel(_x - 1, _y - 1)))
+                                {
+                                    _s++;
+                                    _v = 2;
+                                }
+
+                            if (isBlack(b2.GetPixel(_x + 1, _y - 1))) // правый верхний
+                                if (!isBlack(b2.GetPixel(_x + 0, _y - 1)))
+                                {
+                                    _s++;
+                                    _v = 3;
+                                }
+
+                            if (isBlack(b2.GetPixel(_x + 1, _y + 0))) // правый
+                                if (!isBlack(b2.GetPixel(_x + 1, _y - 1)))
+                                {
+                                    _s++;
+                                    _v = 4;
+                                }
+
+                            if (isBlack(b2.GetPixel(_x + 1, _y + 1))) // правый нижний
+                                if (!isBlack(b2.GetPixel(_x + 1, _y + 0)))
+                                {
+                                    _s++;
+                                    _v = 5;
+                                }
+
+                            if (isBlack(b2.GetPixel(_x + 0, _y + 1))) // нижний
+                                if (!isBlack(b2.GetPixel(_x + 1, _y + 1)))
+                                {
+                                    _s++;
+                                    _v = 6;
+                                }
+
+                            if (isBlack(b2.GetPixel(_x - 1, _y + 1))) // левый нижний
+                                if (!isBlack(b2.GetPixel(_x + 0, _y + 1)))
+                                {
+                                    _s++;
+                                    _v = 7;
+                                }
+
+                            if (isBlack(b2.GetPixel(_x - 1, _y + 0))) // левый
+                                if (!isBlack(b2.GetPixel(_x - 1, _y + 1)))
+                                {
+                                    _s++;
+                                    _v = 8;
+                                }
+                            //MessageBox.Show(_s.ToString());
+
+                            switch (_s)
+                            {
+                                case 0:
+                                    i2.Add(new xPoint(_x, _y, 0));
+                                    //MessageBox.Show($"point {_x} {_y} чёрная");
+                                    break;
+                                case 1:
+                                    i2.Add(new xPoint(_x, _y, 2, _v));
+                                    //MessageBox.Show("vector");
+                                    break;
+                                case 2:
+                                    i2.Add(new xPoint(_x, _y, 3));
+                                    //i2.Last().GetInfo();
+                                    //MessageBox.Show($"line {_x} {_y} чёрная");
+                                    break;
+                                default:
+                                    //MessageBox.Show("cross");
+                                    i2.Add(new xPoint(_x, _y, 1));
+                                    break;
                             }
+                        }   
+                }
 
-                        if (_s == 0)
-                                i2.Add(new xPoint(_x, _y, 0));
-                        if (_s == 1) {
-                            MessageBox.Show("!");
-                            i2.Add(new xPoint(_x, _y, 2, _v));
-                        }
-                        if (_s == 2)
-                            i2.Add(new xPoint(_x, _y, 3));
-                        if (_s > 2)
-                            i2.Add(new xPoint(_x, _y, 1));
-                             
-                        
-
-                        } */
-
-                
+            foreach (xPoint i in i1)
+            {
+                //пока рассчёт только для окончаний
+                //if (i.t == 2)
+                //MessageBox.Show("i1: " + i.x.ToString() + "; " + i.y.ToString());
 
 
-            // foreach (xPoint i in i1)
-            //    MessageBox.Show(i.x.ToString()); ;
+
+
+
+
+
+            }
         }
     }
 }
