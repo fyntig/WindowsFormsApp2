@@ -81,7 +81,7 @@ namespace WindowsFormsApp2
             public int x, y, //координата
                         t,  //тип: 1 - пересечение, 2 - окончание, 3 - точка линии, 0 - точка
                         v;  //направление - как часы: 1, 2 ,3 ,4 ,5 ,6 ,7, 8
-            public double r = 999d; //степень близости к наиболее близкой точке второго рисунка
+            public double r = 1d; //степень близости к наиболее близкой точке второго рисунка
 
             public xPoint(int _x, int _y, int _t) { x = _x; y = _y; t = _t; }
             public xPoint(int _x, int _y, int _t, int _v) { x = _x; y = _y; t = _t; v = _v; }
@@ -292,7 +292,7 @@ namespace WindowsFormsApp2
                             switch (_s)
                             {
                                 case 0:
-                                    i2.Add(new xPoint(_x, _y, 0));
+                                    //i2.Add(new xPoint(_x, _y, 0));
                                     //MessageBox.Show($"point {_x} {_y} чёрная");
                                     break;
                                 case 1:
@@ -300,31 +300,59 @@ namespace WindowsFormsApp2
                                     //MessageBox.Show("vector");
                                     break;
                                 case 2:
-                                    i2.Add(new xPoint(_x, _y, 3));
+                                    //i2.Add(new xPoint(_x, _y, 3));
                                     //i2.Last().GetInfo();
                                     //MessageBox.Show($"line {_x} {_y} чёрная");
                                     break;
                                 default:
                                     //MessageBox.Show("cross");
-                                    i2.Add(new xPoint(_x, _y, 1));
+                                    //i2.Add(new xPoint(_x, _y, 1));
                                     break;
                             }
                         }   
                 }
 
             foreach (xPoint i in i1)
+                foreach (xPoint j in i2)
+                {
+                    //пока рассчёт только для окончаний
+                    //if (i.t == 2)
+                    //MessageBox.Show("i1: " + i.x.ToString() + "; " + i.y.ToString());
+
+                    double tmp_a = Math.Abs(Math.Abs(4 - i.v) - Math.Abs(4 - j.v));
+                    double tmp_b = (Math.Abs(i.x - j.x) + 1) * (Math.Abs(i.y - j.y ) + 1);
+                    double tmp_i = 1000 * tmp_a / tmp_b;
+                    //MessageBox.Show(tmp_i.ToString() + "=" + tmp_a.ToString() + "/" + tmp_b.ToString() + " ->" + i.x.ToString() + ","+i.y.ToString() + ";" + j.x.ToString() + "," + j.y.ToString());
+                    if (i.r < tmp_i) i.r = tmp_i;
+                    if (j.r < tmp_i) j.r = tmp_i;                       
+
+                }
+
+            double res1 = 0d, res2 = 0d;
+            foreach (xPoint i in i1)
             {
-                //пока рассчёт только для окончаний
-                //if (i.t == 2)
-                //MessageBox.Show("i1: " + i.x.ToString() + "; " + i.y.ToString());
-
-
-
-
-
-
-
+                //MessageBox.Show(i.r.ToString());
+                res1 += i.r;
             }
+            res1 = res1 / i1.Count;
+
+            MessageBox.Show(res1.ToString());
+            //MessageBox.Show("i1: " + i.r.ToString());
+            foreach (xPoint i in i2)
+            {
+                //MessageBox.Show(i.r.ToString());
+                res2 += i.r;
+            }
+            res2 = res2 / i2.Count;
+
+            MessageBox.Show(res2.ToString());
+
+            if (res1 > 10 && res2 > 10)
+                MessageBox.Show("ПОХОЖИ!");
+            else
+                MessageBox.Show("РАЗНЫЕ");
+
+
         }
     }
 }
